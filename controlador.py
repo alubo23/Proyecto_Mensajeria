@@ -4,7 +4,7 @@ import sqlite3
 from unittest import result
 
 from flask import flash
-import enviaremail
+#import enviaremail
 
 DB_NAME='bdecommerce.s3db'
 
