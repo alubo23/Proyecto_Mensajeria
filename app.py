@@ -200,10 +200,5 @@ def menu():
 def politicas():
     return render_template('politicas.html')
 
-
-@app.route('/usuarios')
-def menu_user():
-    return render_template('usuarios.html')
-
 if  __name__=='__main__':
      app.run(debug=True)
