@@ -7,7 +7,7 @@ app=Flask(__name__)
 
 app.secret_key='Mi clave Secreta'+str(datetime.now)
 
-###########Rutas para Captura de datos########
+#--- Rutas para Captura de datos ---
 
 @app.route('/prueba')
 def prueba():
@@ -104,8 +104,6 @@ def activar_cuenta():
         flash('Error en Activacion')
     return redirect(url_for('validar'))        
 
-
-
 @app.route('/validarlogin', methods=['POST'])
 def validar_login():
     datos=request.form
@@ -133,9 +131,6 @@ def validar_login():
                     return redirect(url_for('login'))
             else:
                 return redirect(url_for('validar'))                    
-
-
-
 
 @app.route('/addregistro', methods=['POST'])
 def add_registro():
@@ -167,7 +162,8 @@ def add_registro():
     return redirect(url_for('registro'))
 
 
-##########Rutas de Navegacion#################
+#--- Rutas de Navegación ---
+
 @app.route('/')
 def index():
     return render_template('login.html')
