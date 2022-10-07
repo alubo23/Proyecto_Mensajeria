@@ -7,11 +7,12 @@ app=Flask(__name__)
 
 app.secret_key='Mi clave Secreta'+str(datetime.now)
 
-#--- Rutas para Captura de datos ---
+###########Rutas para Captura de datos########
 
 @app.route('/prueba')
 def prueba():
     return True
+
 
 @app.route('/cambiarclave',methods=['POST'])
 def restablece_cuenta():
@@ -104,6 +105,8 @@ def activar_cuenta():
         flash('Error en Activacion')
     return redirect(url_for('validar'))        
 
+
+
 @app.route('/validarlogin', methods=['POST'])
 def validar_login():
     datos=request.form
@@ -131,6 +134,9 @@ def validar_login():
                     return redirect(url_for('login'))
             else:
                 return redirect(url_for('validar'))                    
+
+
+
 
 @app.route('/addregistro', methods=['POST'])
 def add_registro():
@@ -162,14 +168,14 @@ def add_registro():
     return redirect(url_for('registro'))
 
 
-#--- Rutas de Navegación ---
-
+##########Rutas de Navegacion#################
 @app.route('/')
 def index():
     return render_template('login.html')
 
 @app.route('/login')
 def login():
+    session.clear()
     return render_template('login.html')
 
 @app.route('/registro')
@@ -182,23 +188,34 @@ def validar():
 
 @app.route('/mensajeria')
 def mensajeria():
-    return render_template('mensajeria.html')
+    listaruser=controlador.listar_usuario(session['username'])
+    return render_template('mensajeria.html', datauser=listaruser)  
+
 
 @app.route('/recuperar')
 def recuperar():
     return render_template('recuperar.html')
 
+@app.route('/restablecer/<usuario>')
 @app.route('/restablecer')
-def restablecer():
-    return render_template('restablecer.html')
+def restablecer(usuario=None):
+    if usuario:
+       return render_template('restablecer.html', userdata=usuario)
+    else:
+       return render_template('restablecer.html')  
+
 
 @app.route('/menu')
 def menu():
     return render_template('menu.html')
 
-@app.route('/politicas')
-def politicas():
-    return render_template('politicas.html')
+
+@app.before_request
+def protegerrutas():
+    ruta=request.path
+    if not 'username' in session and (ruta=="/menu" or ruta=="/mensajeria"):
+        flash('Por Favor debe Loguearse en el sistema')
+        return redirect('/login')
 
 if  __name__=='__main__':
      app.run(debug=True)
